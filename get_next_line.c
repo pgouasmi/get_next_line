@@ -6,7 +6,7 @@
 /*   By: pgouasmi <pgouasmi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 11:29:38 by pgouasmi          #+#    #+#             */
-/*   Updated: 2022/12/14 16:47:36 by pgouasmi         ###   ########.fr       */
+/*   Updated: 2022/12/15 13:58:16 by pgouasmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void	read_save(int fd, char *stash, char *next_line)
 	int		nl_pres;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	char_count = 1;
 	if (!buffer)
 		return;
+	char_count = 1;
 	//tant qu'il n y a pas de \n dans buffer
-	while (!find_nl(buffer, &nl_pres) && char_count > 0)
+	while (!find_nl(buffer, &nl_pres) && char_count != 0)
 	{
 		char_count = read(fd, buffer, BUFFER_SIZE); // on continue a lire
 		if (char_count <= 0)
@@ -34,12 +34,13 @@ void	read_save(int fd, char *stash, char *next_line)
 			return;
 		}
 		stash = ft_strjoin(stash, buffer);// on ajoute buffer a stash
-		if (!stash)
+		if (stash == NULL)
 			return;
 	}
 	if (nl_pres == 1)
 	{
 		next_line = nl_found(buffer, stash);
+		free(stash);
 		stash = next_line_ready(buffer, stash);
 	}
 	else
@@ -66,7 +67,7 @@ char	*get_next_line(int fd)
 	read_save(fd, stash, next_line);
 	if (!stash)
 		next_line = NULL;
-	stash = next_line_ready(buffer, stash);
+	// = next_line_ready(buffer, stash);
 	return (next_line);
 }
  

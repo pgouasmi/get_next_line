@@ -6,7 +6,7 @@
 /*   By: pgouasmi <pgouasmi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 11:29:34 by pgouasmi          #+#    #+#             */
-/*   Updated: 2022/12/14 16:39:51 by pgouasmi         ###   ########.fr       */
+/*   Updated: 2022/12/15 13:11:24 by pgouasmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ char	*ft_strjoin(char *stash, char *buffer)
 	char	*temp;
 
 	temp = malloc(sizeof(char) * (ft_strlen(stash) + ft_strlen(buffer) + 1));
-
 	i = 0;
 	j = 0;
 	while (stash[i])
@@ -37,6 +36,7 @@ char	*ft_strjoin(char *stash, char *buffer)
 		temp[i] = stash[i];
 		i++;
 	}
+	free(stash);
 	while (buffer[j])
 	{
 		temp[i + j] = buffer[j];
@@ -87,7 +87,7 @@ char *nl_found(char *buffer, char *stash)
 	while(k <= i)
 		temp[j++] = buffer[k++];
 	temp[j] = '\0';
-	free (stash);
+	free(stash);
 	return (temp);
 }
 
@@ -111,5 +111,7 @@ char	*next_line_ready(char *buffer, char *stash)
 		j++;
 		i++;
 	}
+	stash[j] = '\0';
+	free(buffer);
 	return (stash);
 }
