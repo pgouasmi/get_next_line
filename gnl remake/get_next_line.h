@@ -6,7 +6,7 @@
 /*   By: pgouasmi <pgouasmi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 11:29:42 by pgouasmi          #+#    #+#             */
-/*   Updated: 2022/12/16 15:30:41 by pgouasmi         ###   ########.fr       */
+/*   Updated: 2022/12/20 15:53:32 by pgouasmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 // # define BUFFER_SIZE = 10
 
 char	*get_next_line(int fd);
-size_t	ft_strlen(char *str);
-char	*ft_strjoin(char *stash, char *buffer);
-int		check_nl(char *stash);
-char	*send_to_line(char *stash);
-char	*stash_ready(char *stash);
-char	*read_save(int fd, char *stash);
+// size_t	ft_strlen(char *str);
+// char	*ft_strjoin(char *stash, char *buffer);
+// int		check_nl(char *stash);
+// char	*send_to_line(char *stash);
+// char	*stash_ready(char *stash);
+// char	*read_save(int fd, char *stash);
 
-#endif
+# endif

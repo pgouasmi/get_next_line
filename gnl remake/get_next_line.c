@@ -6,7 +6,7 @@
 /*   By: pgouasmi <pgouasmi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:21:18 by pgouasmi          #+#    #+#             */
-/*   Updated: 2022/12/16 16:04:00 by pgouasmi         ###   ########.fr       */
+/*   Updated: 2022/12/20 17:09:53 by pgouasmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ size_t	ft_strlen(char *s)
 int	check_nl(char *stash)
 {
 	size_t	i;
-
+	if (!stash)
+		return (0);
 	i = 0;
 	while (stash[i])
 	{
@@ -71,7 +72,7 @@ char	*ft_strjoin(char *buffer, char *stash)
 		j++;
 	}
 	result[total_length] = '\0';
-	free (stash);
+	free(stash);
 	return (result);
 }
 
@@ -142,7 +143,7 @@ char	*read_save(int fd, char *stash)
 	char	*buffer;
 
 	char_count = 1;
-	buffer = malloc(sizeof(char) * BUFFER_SIZE);
+	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buffer)
 		return(NULL);
 	while (char_count != 0 && !check_nl(stash))
@@ -156,7 +157,7 @@ char	*read_save(int fd, char *stash)
 		buffer[char_count] = '\0';
 		stash = ft_strjoin(stash, buffer);
 	}
-	free (buffer);
+	free(buffer);
 	return (stash);
 }
 
@@ -165,6 +166,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	static char	*stash;
 
+	stash = NULL;
 	if (fd < 0 || read(fd, &line, BUFFER_SIZE) == -1)
 		return (NULL);
 // check si fichier bien appele et si read fonctionne
@@ -172,6 +174,7 @@ char	*get_next_line(int fd)
 	if(!stash)
 		return(NULL);
 	line = send_to_line(stash);
+	free(stash);
 	stash = stash_ready(stash);
 	return (line);
 }
