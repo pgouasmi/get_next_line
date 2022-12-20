@@ -6,7 +6,7 @@
 /*   By: pgouasmi <pgouasmi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 11:29:42 by pgouasmi          #+#    #+#             */
-/*   Updated: 2022/12/16 15:30:41 by pgouasmi         ###   ########.fr       */
+/*   Updated: 2022/12/14 16:22:00 by pgouasmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@
 char	*get_next_line(int fd);
 size_t	ft_strlen(char *str);
 char	*ft_strjoin(char *stash, char *buffer);
-int		check_nl(char *stash);
-char	*send_to_line(char *stash);
-char	*stash_ready(char *stash);
-char	*read_save(int fd, char *stash);
+int		find_nl(char *s, int *nl_pres);
+char	*nl_found(char *buffer, char *stash);
+char	*next_line_ready(char *buffer, char *stash);
 
 #endif
