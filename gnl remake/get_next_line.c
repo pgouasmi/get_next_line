@@ -6,7 +6,7 @@
 /*   By: pgouasmi <pgouasmi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:21:18 by pgouasmi          #+#    #+#             */
-/*   Updated: 2022/12/20 17:09:53 by pgouasmi         ###   ########.fr       */
+/*   Updated: 2022/12/21 18:16:29 by pgouasmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,22 @@ char	*ft_strjoin(char *buffer, char *stash)
 	if (!stash || !buffer)
 		return (NULL);
 	total_length = ft_strlen(stash) + ft_strlen(buffer);
-	result = malloc(sizeof(char) * (total_length + 1));
+	result = (char *)malloc(sizeof(char) * (total_length + 1));
 	if (!result)
 		return (NULL);
-	while (stash[i])
+	if (stash)
 	{
-		result[i] = stash[i];
-		i++;
+		while (stash[i])
+		{
+			result[i] = stash[i];
+			i++;
+		}
 	}
 	while (buffer[j])
 	{
-		result[i + j] = buffer[j];
+		result[i] = buffer[j];
 		j++;
+		i++;
 	}
 	result[total_length] = '\0';
 	free(stash);
@@ -81,12 +85,12 @@ char	*send_to_line(char *stash)
 	size_t	i;
 	char	*s;
 
-	if (!stash)
-		return(NULL);
 	i = 0;
+	if (!stash[i])
+		return(NULL);
 	while(stash[i] != '\n' && stash[i])
 		i++;
-	s = malloc(sizeof(char) * (i + 1));
+	s = (char *)malloc(sizeof(char) * (i + 2));
 	if (!s)
 		return (NULL);
 	i = 0;
@@ -113,24 +117,22 @@ char	*stash_ready(char *stash)
 
 	i = 0;
 	j = 0;
-	if (!stash)
-		return (NULL);
+	// if (!stash)
+	// 	return (NULL);
 	while(stash[i] != '\n' && stash[i])
 		i++;
-	if (!stash[i])
+	if (stash[i] == '\0')
 	{
 		free(stash);
 		return (NULL);
 	}
-	temp = malloc(sizeof(char) * (ft_strlen(stash) - i + 1));
+	temp = (char *)malloc(sizeof(char) * (ft_strlen(stash) - i + 1));
 	if (!temp)
 		return (NULL);
 	i++;
 	while(stash[i])
 	{
-		temp[j] = stash[i];
-		i++;
-		j++;
+		temp[j++] = stash[i++];
 	}
 	temp[j] = '\0';
 	free(stash);
@@ -146,7 +148,7 @@ char	*read_save(int fd, char *stash)
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buffer)
 		return(NULL);
-	while (char_count != 0 && !check_nl(stash))
+	while (char_count > 0 && !check_nl(stash))
 	{
 		char_count = read(fd, buffer, BUFFER_SIZE);
 		if (char_count == -1)
@@ -155,7 +157,7 @@ char	*read_save(int fd, char *stash)
 			return(NULL);
 		}
 		buffer[char_count] = '\0';
-		stash = ft_strjoin(stash, buffer);
+		stash = ft_strjoin(buffer, stash);
 	}
 	free(buffer);
 	return (stash);
@@ -167,14 +169,12 @@ char	*get_next_line(int fd)
 	static char	*stash;
 
 	stash = NULL;
-	if (fd < 0 || read(fd, &line, BUFFER_SIZE) == -1)
-		return (NULL);
-// check si fichier bien appele et si read fonctionne
-	stash = read_save(fd, stash); // envoie buffer dans stash en join
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
+	stash = read_save(fd, stash);
 	if(!stash)
 		return(NULL);
 	line = send_to_line(stash);
-	free(stash);
 	stash = stash_ready(stash);
 	return (line);
 }
