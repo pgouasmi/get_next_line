@@ -6,7 +6,7 @@
 /*   By: pgouasmi <pgouasmi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:21:18 by pgouasmi          #+#    #+#             */
-/*   Updated: 2022/12/21 18:16:29 by pgouasmi         ###   ########.fr       */
+/*   Updated: 2023/01/05 09:56:05 by pgouasmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*send_to_line(char *stash)
 		return(NULL);
 	while(stash[i] != '\n' && stash[i])
 		i++;
-	s = (char *)malloc(sizeof(char) * (i + 2));
+	s = (char *)malloc(sizeof(char) * (i + 1 + check_nl(stash)));
 	if (!s)
 		return (NULL);
 	i = 0;
@@ -113,12 +113,12 @@ char	*stash_ready(char *stash)
 {
 	size_t	i;
 	size_t	j;
-	char	*temp;
+	char 	*temp;
 
 	i = 0;
 	j = 0;
-	// if (!stash)
-	// 	return (NULL);
+	if (!stash)
+		return (NULL);
 	while(stash[i] != '\n' && stash[i])
 		i++;
 	if (stash[i] == '\0')
@@ -154,6 +154,7 @@ char	*read_save(int fd, char *stash)
 		if (char_count == -1)
 		{
 			free(buffer);
+			free(stash);
 			return(NULL);
 		}
 		buffer[char_count] = '\0';
@@ -168,12 +169,11 @@ char	*get_next_line(int fd)
 	char		*line;
 	static char	*stash;
 
-	stash = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
 	stash = read_save(fd, stash);
 	if(!stash)
-		return(NULL);
+		return (NULL);
 	line = send_to_line(stash);
 	stash = stash_ready(stash);
 	return (line);
